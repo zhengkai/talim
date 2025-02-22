@@ -3,7 +3,6 @@ package web
 import (
 	"net/http"
 	"project/config"
-	"project/metrics"
 	"project/zj"
 	"time"
 )
@@ -12,7 +11,7 @@ import (
 func Server() {
 
 	mux := http.NewServeMux()
-	mux.HandleFunc(`/`, failbackHandle)
+	mux.HandleFunc(`/api/upload`, uploadHandle)
 
 	s := &http.Server{
 		Addr:         config.WebAddr,
@@ -29,9 +28,4 @@ func Server() {
 		zj.W(err)
 		return
 	}
-}
-
-func failbackHandle(w http.ResponseWriter, r *http.Request) {
-	metrics.ErrorCount(http.StatusNotFound)
-	zj.J(`failback handle`, r.URL.String())
 }
