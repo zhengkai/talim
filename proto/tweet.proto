@@ -1,0 +1,33 @@
+syntax = "proto3";
+option go_package = "/pb";
+package pb;
+
+import "user.proto";
+
+message TweetRow {
+	uint64 tid = 1;
+	uint64 uid = 2;
+	string text = 4;
+	uint32 ts = 5;
+	repeated TweetMedia media = 6;
+	uint64 quote = 7;
+	TweetReply reply = 8;
+}
+
+message TweetReply {
+	uint64 tid = 1;
+	uint64 uid = 2;
+}
+
+message TweetMedia {
+	string img = 1;
+	string video = 2;
+	string contentType = 3;
+	uint32 durMS = 4;
+}
+
+message TweetList {
+	repeated User user = 1;
+	repeated TweetRow tweet = 2;
+}
+

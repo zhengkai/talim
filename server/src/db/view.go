@@ -1,6 +1,9 @@
 package db
 
-import "project/pb"
+import (
+	"project/pb"
+	"project/zj"
+)
 
 func ViewUserCount(serial uint64) *pb.UserList {
 
@@ -23,6 +26,28 @@ func ViewUserCount(serial uint64) *pb.UserList {
 			Uid:        uid,
 			TweetCount: cnt,
 		})
+	}
+	return o
+}
+
+func ViewUserTweet(serial, uid uint64) *pb.TweetList {
+
+	sql := "SELECT tid, bid FROM tweet WHERE serial = ? AND uid = ? ORDER BY tid DESC LIMIT 5000"
+	rs, err := d.Query(sql, serial, uid)
+	if err != nil {
+		zj.W(err)
+		return nil
+	}
+	defer rs.Close()
+
+	o := &pb.TweetList{}
+	for rs.Next() {
+		r := &pb.TweetRow{}
+		err := rs.Scan(&r.Tid, &r.Uid)
+		if err != nil {
+			continue
+		}
+		o.Tweet = append(o.Tweet, r)
 	}
 	return o
 }

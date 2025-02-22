@@ -3,7 +3,6 @@ package view
 import (
 	"errors"
 	"project/db"
-	"project/zj"
 	"time"
 
 	jp "github.com/buger/jsonparser"
@@ -18,7 +17,7 @@ func userNameCoral(su serialUser) (string, *time.Time, error) {
 	bin := db.UserLoad(su.uuserial, su.uid)
 
 	if bin == nil {
-		zj.J(`load fail`)
+		// zj.J(`load user fail`, su.uid)
 		return ``, nil, errors.New(`load user fail`)
 	}
 
@@ -27,12 +26,10 @@ func userNameCoral(su serialUser) (string, *time.Time, error) {
 }
 
 func (v *View) UserName(uid uint64) string {
-
 	q := serialUser{
 		uuserial: v.uuserial,
 		uid:      uid,
 	}
-
 	name, _ := v.nameCache.Get(q)
 	return name
 }

@@ -1,0 +1,19 @@
+syntax = "proto3";
+option go_package = "/pb";
+package pb;
+
+message TwitterMedia {
+	string media_url_https = 1;
+	TwitterMediaVideoInfo video_info = 2;
+}
+
+message TwitterMediaVideoInfo {
+	int32 duration_millis = 1;
+	repeated TwitterMediaVideoVariant variants = 2;
+}
+
+message TwitterMediaVideoVariant {
+	string content_type = 1;
+	string url = 2;
+	uint32 bitrate = 3;
+}
