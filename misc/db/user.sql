@@ -1,0 +1,8 @@
+CREATE DATABASE IF NOT EXISTS `talim` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+
+CREATE USER 'talim'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'talim';
+GRANT USAGE ON *.* TO 'talim'@'localhost';
+ALTER USER 'talim'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
+
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, LOCK TABLES ON `talim`.* TO 'talim'@'localhost';
+ALTER USER 'talim'@'localhost' ;
