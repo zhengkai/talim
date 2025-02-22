@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"project/config"
+	"project/geoip"
 	"project/util"
 	"project/view"
 	"project/zj"
@@ -51,6 +52,11 @@ func writeJSON(w http.ResponseWriter, v proto.Message) {
 }
 
 func newView(r *http.Request) *view.View {
+	ip := r.Header.Get(`X-Real-IP`)
+	if geoip.Check(ip) {
+		zj.J(`cn ip`, ip)
+		return nil
+	}
 	return view.New(getUUID(r))
 }
 

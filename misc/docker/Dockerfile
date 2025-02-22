@@ -4,8 +4,8 @@ FROM golang:latest AS builder
 
 ARG DOCKER_RUNNING=yes
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt install -yq protobuf-compiler 
-RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.2
+RUN apt update && apt install -yq protobuf-compiler
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.35.2
 
 COPY . /project
 
@@ -21,7 +21,7 @@ FROM alpine
 
 RUN mkdir /static
 
-RUN apk add --no-cache gzip brotli tzdata ca-certificates 
+RUN apk add --no-cache gzip brotli tzdata ca-certificates
 
 COPY --from=builder /project/server/dist/prod/talim-server-next /talim-server
 
