@@ -10,10 +10,13 @@ func (u *upload) Run() {
 	zj.J(`run`, u.uuid.String(), len(u.body))
 
 	size := len(u.body)
-	if size > 10000 {
-		file := fmt.Sprintf(`upload/upload-%d.json`, size)
-		if !util.FileExists(file) {
-			util.WriteFile(file, u.body)
-		}
+	if size < 10000 {
+		return
 	}
+	file := fmt.Sprintf(`upload/upload-%d.json`, size)
+	if !util.FileExists(file) {
+		util.WriteFile(file, u.body)
+	}
+
+	u.scanObj(u.body)
 }

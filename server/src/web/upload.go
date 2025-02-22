@@ -4,11 +4,11 @@ import (
 	"io"
 	"net/http"
 	"project/upload"
+	"project/util"
 
 	"github.com/google/uuid"
 )
 
-var defaultUUID = uuid.MustParse(`00000000-0000-0000-0000-000000000000`)
 var ok = []byte(`{"ok":true}`)
 
 func uploadHandle(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +26,7 @@ func uploadHandle(w http.ResponseWriter, r *http.Request) {
 
 	u, err := uuid.Parse(r.URL.Query().Get(`uuid`))
 	if err != nil {
-		u = defaultUUID
+		u = util.DefaultUUID
 	}
 
 	upload.New(u, body)

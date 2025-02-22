@@ -10,15 +10,7 @@ import (
 const keyTypeUser = `User`
 const keyTypeTweet = `Tweet`
 
-type scan struct {
-}
-
-func startScan(ab []byte) {
-	s := scan{}
-	s.scanObj(ab)
-}
-
-func (s *scan) check(ab []byte) {
+func (u *upload) check(ab []byte) {
 	t, _ := jp.GetString(ab, `__typename`)
 	if t == `` {
 		return
@@ -43,31 +35,31 @@ func (s *scan) check(ab []byte) {
 
 	switch t {
 	case `Tweet`:
-		importTweet(legacy)
+		u.importTweet(legacy)
 	case `User`:
-		importUser(legacy)
+		u.importUser(legacy)
 	}
 }
 
-func (s *scan) scanObj(ab []byte) {
+func (u *upload) scanObj(ab []byte) {
 
-	s.check(ab)
+	u.check(ab)
 
 	jp.ObjectEach(ab, func(k []byte, v []byte, t jp.ValueType, _ int) error {
 		switch t {
 		case jp.Object:
-			s.scanObj(v)
+			u.scanObj(v)
 		case jp.Array:
-			s.scanArray(v)
+			u.scanArray(v)
 		}
 		return nil
 	})
 }
 
-func (s *scan) scanArray(ab []byte) {
+func (u *upload) scanArray(ab []byte) {
 	jp.ArrayEach(ab, func(v []byte, t jp.ValueType, _ int, _ error) {
 		if t == jp.Object {
-			s.scanObj(v)
+			u.scanObj(v)
 		}
 	})
 }
