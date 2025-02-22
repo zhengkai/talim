@@ -2,7 +2,9 @@ package upload
 
 import (
 	"encoding/json"
+	"project/db"
 	"project/util"
+	"project/zj"
 	"strconv"
 	"strings"
 
@@ -38,7 +40,7 @@ var cleanTweetKey = []string{
 	`is_quote_status`,
 }
 
-func (u *upload) importUser(ab []byte) *user {
+func (u *upload) importUser(ab []byte, uid uint64) *user {
 	var o map[string]any
 	err := json.Unmarshal(ab, &o)
 	if err != nil {
@@ -57,29 +59,45 @@ func (u *upload) importUser(ab []byte) *user {
 			continue
 		}
 	}
-	uid := getUIDFromUser(ab)
 	if uid == 0 {
-		util.WriteFile(`debug/user-no-uid.json`, ab)
-		return nil
+		uid = getUIDFromBanner(ab)
+		if uid == 0 {
+			util.WriteFile(`debug/user-no-uid.json`, ab)
+			return nil
+		}
 	}
 	re, err := json.Marshal(o)
 	if err != nil {
+		zj.W(err)
 		return nil
 	}
+
+	bid := db.BinSave(re)
+	if bid == 0 {
+		zj.W(`bin fail`)
+		return nil
+	}
+
+	db.UserSave(u.Serial(), uid, bid)
+
 	return &user{
 		uid: uid,
 		bin: re,
 	}
 }
 
-func getUIDFromUser(ab []byte) uint64 {
+func getUIDFromBanner(ab []byte) uint64 {
 
 	s, err := jp.GetString(ab, `profile_banner_url`)
 	if err != nil {
 		return 0
 	}
 
-	i, err := strconv.ParseUint(s, 10, 64)
+	if !strings.HasPrefix(s, `https://pbs.twimg.com/profile_banners/`) {
+		return 0
+	}
+	li := strings.Split(s, `/`)
+	i, err := strconv.ParseUint(li[4], 10, 64)
 	if err != nil {
 		return 0
 	}
@@ -122,6 +140,14 @@ func (u *upload) importTweet(ab []byte) *tweet {
 	if err != nil {
 		return nil
 	}
+
+	bid := db.BinSave(re)
+	if bid == 0 {
+		return nil
+	}
+
+	db.TweetSave(u.Serial(), tid, uid, bid)
+
 	return &tweet{
 		uid: uid,
 		tid: tid,

@@ -14,9 +14,9 @@ func run() {
 
 	zj.Init()
 
-	upload.Test()
-
 	db.WaitConn()
+
+	upload.Test()
 
 	go web.Server()
 }

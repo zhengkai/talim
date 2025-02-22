@@ -37,7 +37,8 @@ func (u *upload) check(ab []byte) {
 	case `Tweet`:
 		u.importTweet(legacy)
 	case `User`:
-		u.importUser(legacy)
+		uid := util.JSONStr2Uint(ab, `rest_id`)
+		u.importUser(legacy, uid)
 	}
 }
 

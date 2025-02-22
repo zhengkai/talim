@@ -7,7 +7,7 @@ import (
 )
 
 func JSONStr2Uint(ab []byte, k string) uint64 {
-	s, err := jp.GetString(ab, `id_str`)
+	s, err := jp.GetString(ab, k)
 	if err != nil {
 		return 0
 	}
