@@ -72,13 +72,7 @@ func (u *upload) importUser(ab []byte, uid uint64) *user {
 		return nil
 	}
 
-	bid := db.BinSave(re)
-	if bid == 0 {
-		zj.W(`bin fail`)
-		return nil
-	}
-
-	db.UserSave(u.Serial(), uid, bid)
+	db.UserSave(u.Serial(), uid, re)
 
 	return &user{
 		uid: uid,

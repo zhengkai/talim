@@ -2,9 +2,12 @@ package db
 
 import (
 	"crypto/md5"
+	"errors"
 
 	"github.com/zhengkai/zu"
 )
+
+var ErrBinFail = errors.New("save bin fail")
 
 func BinSave(v []byte) uint64 {
 
@@ -25,7 +28,7 @@ func BinSave(v []byte) uint64 {
 }
 
 func BinLoad(bid uint64) (v []byte) {
-	sql := `SELECT content FROM bin WHERE id = ?`
+	sql := `SELECT content FROM bin WHERE bid = ?`
 	row := d.QueryRow(sql, bid)
 	row.Scan(&v)
 	return

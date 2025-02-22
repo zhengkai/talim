@@ -14,7 +14,11 @@ func Serial(u uuid.UUID) uint64 {
 		return uint64(id)
 	}
 
-	sql = `SELECT serial FROM uuserial  WHERE uuid = ?`
+	return SerialLoad(u)
+}
+
+func SerialLoad(u uuid.UUID) uint64 {
+	sql := `SELECT serial FROM uuserial  WHERE uuid = ?`
 	row := d.QueryRow(sql, u[:])
 	var id uint64
 	row.Scan(&id)

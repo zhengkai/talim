@@ -1,0 +1,13 @@
+syntax = "proto3";
+option go_package = "/pb";
+package pb;
+
+message UserRow {
+	uint64 uid = 1;
+	string screenName = 2;
+	uint64 tweetCount = 3;
+}
+
+message UserList {
+	repeated UserRow list = 1;
+}

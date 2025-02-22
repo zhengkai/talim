@@ -3,7 +3,8 @@ package project
 import (
 	"project/build"
 	"project/db"
-	"project/upload"
+	"project/util"
+	"project/view"
 	"project/web"
 	"project/zj"
 )
@@ -16,7 +17,9 @@ func run() {
 
 	db.WaitConn()
 
-	upload.Test()
+	// upload.Test()
+
+	view.New(util.DefaultUUID)
 
 	go web.Server()
 }
