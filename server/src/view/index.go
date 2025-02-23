@@ -14,6 +14,9 @@ func (v *View) Index() *pb.UserList {
 
 	o := &pb.UserList{}
 	for _, du := range li {
+		if du.TweetCount < 2 {
+			continue
+		}
 		pu := v.GetUser(du.Uid)
 		if pu == nil {
 			continue
