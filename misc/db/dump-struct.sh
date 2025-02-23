@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 DB="talim"
 
@@ -12,7 +12,6 @@ DIR="$(dirname "$(readlink -f "$0")")" && cd "$DIR" || exit 1
 	--add-locks \
 	--hex-blob \
 	--quick \
-	--skip-dump-date \
 	--databases "$DB" \
 	| sed 's# AUTO_INCREMENT=[0-9]*##g' \
 	> "${DB}-struct.sql"
