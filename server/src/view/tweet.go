@@ -51,10 +51,7 @@ func (v *View) TweetFillUser(t *pb.TweetList) {
 		}
 		_, ok := ul[uid]
 		if !ok {
-			ul[uid] = &pb.User{
-				Uid:        uid,
-				ScreenName: v.UserName(uid),
-			}
+			ul[uid] = v.GetUser(uid)
 		}
 	}
 
@@ -63,7 +60,7 @@ func (v *View) TweetFillUser(t *pb.TweetList) {
 		check(r.Reply.GetUid())
 	}
 	for _, r := range ul {
-		if r.ScreenName == `` {
+		if r == nil {
 			continue
 		}
 		t.User = append(t.User, r)

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"project/db"
+	"project/pb"
 	"time"
 
 	"github.com/google/uuid"
@@ -12,7 +13,7 @@ import (
 
 type View struct {
 	uuserial  uint64
-	nameCache coral.Cache[serialUser, string]
+	userCache coral.Cache[serialUser, *pb.User]
 	w         http.ResponseWriter
 	r         *http.Request
 }
@@ -33,7 +34,7 @@ func viewCoral(u uuid.UUID) (*View, *time.Time, error) {
 
 	v := &View{
 		uuserial:  uuserial,
-		nameCache: coral.NewLRU(userNameCoral, 5000, 100),
+		userCache: coral.NewLRU(userCoral, 5000, 100),
 	}
 	return v, nil, nil
 }

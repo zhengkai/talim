@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"project/pb"
 	"project/zj"
 )
 
@@ -12,29 +11,30 @@ type TweetRow struct {
 	Bid uint64
 }
 
-func ViewUserCount(serial uint64) *pb.UserList {
+type UserRow struct {
+	Uid        uint64
+	TweetCount uint64
+}
+
+func ViewUserCount(serial uint64) []*UserRow {
 
 	sql := "SELECT uid, COUNT(uid) as cnt FROM tweet WHERE serial = ? GROUP BY uid"
 	rs, err := d.Query(sql, serial)
 	if err != nil {
-		panic(err)
+		return nil
 	}
 
-	o := &pb.UserList{}
+	var li []*UserRow
 	defer rs.Close()
 	for rs.Next() {
-		var uid uint64
-		var cnt uint64
-		err := rs.Scan(&uid, &cnt)
+		ur := &UserRow{}
+		err := rs.Scan(&ur.Uid, &ur.TweetCount)
 		if err != nil {
 			continue
 		}
-		o.List = append(o.List, &pb.UserRow{
-			Uid:        uid,
-			TweetCount: cnt,
-		})
+		li = append(li, ur)
 	}
-	return o
+	return li
 }
 
 func TweetRecent(serial, tid uint64) ([]*TweetRow, error) {

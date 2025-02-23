@@ -5,13 +5,18 @@ package pb;
 
 message User {
 	uint64 uid = 1;
-	string screenName = 2;
+	string name = 2;
+	string screenName = 4;
+	string avatar = 5;
+	string banner = 6;
+	string bio = 7;
+	string location = 8;
+	uint32 tsCreate = 9;
 }
 
 message UserRow {
-	uint64 uid = 1;
-	string screenName = 2;
-	uint64 tweetCount = 3;
+	User user = 1;
+	uint64 tweetCount = 2;
 }
 
 message UserList {

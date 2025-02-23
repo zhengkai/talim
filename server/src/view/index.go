@@ -7,13 +7,21 @@ import (
 
 func (v *View) Index() *pb.UserList {
 
-	o := db.ViewUserCount(v.uuserial)
-	if o == nil {
+	li := db.ViewUserCount(v.uuserial)
+	if len(li) == 0 {
 		return nil
 	}
 
-	for _, u := range o.List {
-		u.ScreenName = v.UserName(u.Uid)
+	o := &pb.UserList{}
+	for _, du := range li {
+		pu := v.GetUser(du.Uid)
+		if pu == nil {
+			continue
+		}
+		o.List = append(o.List, &pb.UserRow{
+			User:       pu,
+			TweetCount: du.TweetCount,
+		})
 	}
 	return o
 }
