@@ -1,4 +1,4 @@
-@if (loadDone && !tweet?.length) {
+@if (loadDone && !tweet.length) {
   <div class="container">load fail</div>
 }
 
@@ -29,7 +29,7 @@
   <p class="date code">{{ t.ts * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}
     <a href="https://x.com/x/status/{{ t.tid }}" target="_blank">original</a>
   </p>
-  @if (t.media?.length) {
+  @if (t.media.length) {
     <div class="media">
     @for (m of t.media; track $index) {
       <img src="{{ m.img }}" />
