@@ -61,8 +61,8 @@ func outputData(w http.ResponseWriter, r *http.Request, v proto.Message) {
 			errorServerFail(w)
 			return
 		}
+		w.Header().Set(`Content-Type`, `application/json`)
 	}
-	w.Header().Set(`Content-Type`, `application/json`)
 	w.Header().Set(`Content-Length`, strconv.Itoa(len(ab)))
 	w.Write(ab)
 }

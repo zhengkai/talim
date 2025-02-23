@@ -7,7 +7,7 @@ server:
 	protoc --go_out=../server/src *.proto
 
 client:
-	$(PBJS) -t static-module -w es6 --es6 --force-number -o ../client/src/pb/pb.js *.proto
+	$(PBJS) -t static-module -w es6 --es6 --force-long -o ../client/src/pb/pb.js *.proto
 	$(PBTS) -o ../client/src/pb/pb.d.ts ../client/src/pb/pb.js
 
 all: server client
