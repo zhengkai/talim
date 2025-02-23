@@ -23,7 +23,9 @@ func userCoral(su serialUser) (*pb.User, *time.Time, error) {
 		return nil, nil, errors.New(`load user fail`)
 	}
 
-	u := &pb.User{}
+	u := &pb.User{
+		Uid: su.uid,
+	}
 	u.Name, _ = jp.GetString(bin, `name`)
 	u.ScreenName, _ = jp.GetString(bin, `screen_name`)
 	u.Avatar, _ = jp.GetString(bin, `profile_image_url_https`)

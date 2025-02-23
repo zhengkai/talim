@@ -18,7 +18,7 @@ func indexHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, re)
+	outputData(w, r, re)
 }
 
 func recentHandle(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +35,7 @@ func recentHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, re)
+	outputData(w, r, re)
 }
 
 func tweetHandle(w http.ResponseWriter, r *http.Request) {
@@ -52,5 +52,5 @@ func tweetHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, re)
+	outputData(w, r, re)
 }
