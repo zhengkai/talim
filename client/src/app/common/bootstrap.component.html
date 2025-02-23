@@ -1,5 +1,13 @@
-<header>
-  <p>test</p>
-</header>
-
-<router-outlet />
+@if (!loadDone) {
+  <div class="container">
+    <div>loading...</div>
+  </div>
+} @else {
+  @if (loadError) {
+    <div class="container">
+      <div>load fail</div>
+    </div>
+  } @else {
+    <router-outlet />
+  }
+}

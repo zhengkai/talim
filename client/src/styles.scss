@@ -1,1 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
+img.avatar {
+  max-width: 24px;
+  max-height: 24px;
+  padding: 0;
+}
+
+div.index {
+  padding: 16px;
+  button {
+    img {
+      margin-right: 4px;
+    }
+    margin: 8px;
+    text-wrap: nowrap;
+    max-width: 200px;
+    min-width: 160px;
+    overflow: hidden;
+    span {
+      font-size: 14px;
+      color: gray;
+    }
+  }
+}
