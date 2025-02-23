@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { pb } from '../../pb';
 import Long from 'long';
 import { api } from '../common/api';
 import protobuf from 'protobufjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+  ],
   templateUrl: './bootstrap.component.html',
 })
 export class BootstrapComponent {

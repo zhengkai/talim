@@ -1,8 +1,8 @@
 <div class="index">
 @for(o of api.userList; track $index) {
-  <button class="btn btn-outline-primary" title="{{ o.user?.name }} ( {{ o.tweetCount }})">
+  <a [href]="'tweet/' + o.user?.uid" class="btn btn-outline-primary" title="{{ o.user?.name }} ( {{ o.tweetCount }})">
     <img class="avatar" src="{{ o.user?.avatar }}" />
     {{ o.user?.name }} <span>({{ o.tweetCount }})</span>
-  </button>
+  </a>
 }
 </div>

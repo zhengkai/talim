@@ -1,0 +1,40 @@
+@if (loadDone && !tweet?.length) {
+  <div class="container">load fail</div>
+}
+
+@if (cover) {
+  <div class="cover">
+  <div class="container">
+  <div>
+    <img class="banner" src="{{ cover.banner }}">
+  </div>
+  <div>
+    <img class="avatar-big" src="{{ cover.avatar.replace('_normal\.jpg', '_400x400.jpg') }}">
+    {{ cover.uid }} /
+    {{ cover.name }} /
+    {{ cover.screenName }}
+    <p>
+      {{ cover.bio }}<br>
+      {{ cover.location }}<br>
+      created at {{ cover.tsCreate * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}
+    </p>
+  </div>
+  </div>
+  </div>
+}
+
+@for (t of tweet; track $index) {
+<div class="tweet container">
+  <p class="text">{{ t.text }}</p>
+  <p class="date code">{{ t.ts * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}
+    <a href="https://x.com/x/status/{{ t.tid }}" target="_blank">original</a>
+  </p>
+  @if (t.media?.length) {
+    <div class="media">
+    @for (m of t.media; track $index) {
+      <img src="{{ m.img }}" />
+    }
+    </div>
+  }
+</div>
+}

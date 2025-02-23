@@ -11,7 +11,7 @@ class Api {
     this.uuid = uuid;
   }
 
-  async fetch(uri: string): Promise<Uint8Array> {
+  async fetch(uri: string): Promise<Uint8Array | null> {
 
     if (uri.includes('?')) {
       uri += `&`;
@@ -23,6 +23,9 @@ class Api {
     const rsp = await fetch(`/api/${uri}&output=pb`, {
       method: 'GET',
     })
+    if (!rsp?.ok) {
+      return null;
+    }
     const ab = await rsp.arrayBuffer();
     return new Uint8Array(ab);
   }

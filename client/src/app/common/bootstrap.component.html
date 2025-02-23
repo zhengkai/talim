@@ -8,6 +8,18 @@
       <div>load fail</div>
     </div>
   } @else {
+    <header>
+      <div class="container">
+        <div class="row">
+          <div class="col d-flex justify-content-start">
+            <a [routerLink]="['/home']">home</a>
+          </div>
+          <div class="col d-flex justify-content-end">
+            <a href="https://github.com/zhengkai/talim">github</a>
+          </div>
+        </div>
+      </div>
+    </header>
     <router-outlet />
   }
 }
