@@ -21,6 +21,7 @@ func Server() {
 	mux := http.NewServeMux()
 	mux.HandleFunc(`/api/index`, indexHandle)
 	mux.HandleFunc(`/api/tweet`, tweetHandle)
+	mux.HandleFunc(`/api/recent`, recentHandle)
 	mux.HandleFunc(`/api/upload`, uploadHandle)
 
 	s := &http.Server{

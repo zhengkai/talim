@@ -2,6 +2,7 @@ package view
 
 import (
 	"errors"
+	"net/http"
 	"project/db"
 	"time"
 
@@ -12,6 +13,8 @@ import (
 type View struct {
 	uuserial  uint64
 	nameCache coral.Cache[serialUser, string]
+	w         http.ResponseWriter
+	r         *http.Request
 }
 
 var viewCache = coral.NewLRU(viewCoral, 1000, 100)

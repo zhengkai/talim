@@ -3,6 +3,7 @@ package view
 import (
 	"errors"
 	"project/db"
+	"project/zj"
 	"time"
 
 	jp "github.com/buger/jsonparser"
@@ -15,6 +16,8 @@ type serialUser struct {
 
 func userNameCoral(su serialUser) (string, *time.Time, error) {
 	bin := db.UserLoad(su.uuserial, su.uid)
+
+	zj.J(string(bin))
 
 	if bin == nil {
 		// zj.J(`load user fail`, su.uid)

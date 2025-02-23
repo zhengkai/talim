@@ -5,26 +5,40 @@ import (
 	"project/db"
 	"project/pb"
 	"project/util"
-	"project/zj"
 	"time"
 
 	jp "github.com/buger/jsonparser"
 )
 
-func (v *View) TweetList(uid uint64) *pb.TweetList {
+func (v *View) TweetList(uid uint64, tid uint64) *pb.TweetList {
 
-	o := db.ViewUserTweet(v.uuserial, uid)
-	if len(o.GetTweet()) == 0 {
+	li, _ := db.TweetList(v.uuserial, uid, tid)
+	if len(li) == 0 {
 		return nil
 	}
 
-	for _, v := range o.Tweet {
-		TweetFill(v, v.Uid)
-		v.Uid = uid
+	return v.fillTweetList(li)
+}
+
+func (v *View) TweetRecent(tid uint64) *pb.TweetList {
+
+	li, _ := db.TweetRecent(v.uuserial, tid)
+	if len(li) == 0 {
+		return nil
+	}
+
+	return v.fillTweetList(li)
+}
+
+func (v *View) fillTweetList(li []*db.TweetRow) *pb.TweetList {
+
+	o := &pb.TweetList{}
+
+	for _, v := range li {
+		o.Tweet = append(o.Tweet, TweetRow(v))
 	}
 
 	v.TweetFillUser(o)
-
 	return o
 }
 
@@ -56,19 +70,24 @@ func (v *View) TweetFillUser(t *pb.TweetList) {
 	}
 }
 
-func TweetFill(r *pb.TweetRow, bid uint64) {
+func TweetRow(dr *db.TweetRow) *pb.TweetRow {
 
-	bin := db.BinLoad(bid)
+	pr := &pb.TweetRow{
+		Tid: dr.Tid,
+		Uid: dr.Uid,
+	}
+
+	bin := db.BinLoad(dr.Bid)
 
 	// text
-	r.Text, _ = jp.GetString(bin, `full_text`)
+	pr.Text, _ = jp.GetString(bin, `full_text`)
 
 	// ts
 	st, err := jp.GetString(bin, `created_at`)
 	if err == nil {
 		t, err := time.Parse(time.RubyDate, st)
 		if err == nil {
-			r.Ts = uint32(t.Unix())
+			pr.Ts = uint32(t.Unix())
 		}
 	}
 
@@ -83,7 +102,7 @@ func TweetFill(r *pb.TweetRow, bid uint64) {
 		m := &pb.TweetMedia{
 			Img: o.MediaUrlHttps,
 		}
-		r.Media = append(r.Media, m)
+		pr.Media = append(pr.Media, m)
 
 		vli := o.GetVideoInfo().GetVariants()
 		if len(vli) > 0 {
@@ -97,18 +116,16 @@ func TweetFill(r *pb.TweetRow, bid uint64) {
 			m.ContentType = vo.ContentType
 			m.DurMS = uint32(o.GetVideoInfo().GetDurationMillis())
 		}
-
-		zj.J(r.Tid)
-		util.DumpJSON(o)
 	}, `entities`, `media`)
 
 	// reply
 	replyTID := util.JSONStr2Uint(bin, `in_reply_to_status_id_str`)
 	replyUID := util.JSONStr2Uint(bin, `in_reply_to_user_id_str`)
 	if replyTID > 0 || replyUID > 0 {
-		r.Reply = &pb.TweetReply{
+		pr.Reply = &pb.TweetReply{
 			Tid: replyTID,
 			Uid: replyUID,
 		}
 	}
+	return pr
 }

@@ -1,9 +1,16 @@
 package db
 
 import (
+	"database/sql"
 	"project/pb"
 	"project/zj"
 )
+
+type TweetRow struct {
+	Tid uint64
+	Uid uint64
+	Bid uint64
+}
 
 func ViewUserCount(serial uint64) *pb.UserList {
 
@@ -30,24 +37,58 @@ func ViewUserCount(serial uint64) *pb.UserList {
 	return o
 }
 
-func ViewUserTweet(serial, uid uint64) *pb.TweetList {
+func TweetRecent(serial, tid uint64) ([]*TweetRow, error) {
 
-	sql := "SELECT tid, bid FROM tweet WHERE serial = ? AND uid = ? ORDER BY tid DESC LIMIT 5000"
-	rs, err := d.Query(sql, serial, uid)
+	var rs *sql.Rows
+	var err error
+
+	if tid == 0 {
+		sql := "SELECT tid, uid, bid FROM tweet WHERE serial = ? ORDER BY tid DESC LIMIT 5000"
+		rs, err = d.Query(sql, serial)
+	} else {
+		sql := "SELECT tid, uid, bid FROM tweet WHERE serial = ? AND tid < ? ORDER BY tid DESC LIMIT 5000"
+		rs, err = d.Query(sql, serial, tid)
+	}
+
 	if err != nil {
 		zj.W(err)
-		return nil
+		return nil, err
 	}
 	defer rs.Close()
 
-	o := &pb.TweetList{}
+	return listTweet(rs)
+}
+
+func TweetList(serial, uid, tid uint64) ([]*TweetRow, error) {
+
+	var rs *sql.Rows
+	var err error
+
+	if tid == 0 {
+		sql := "SELECT tid, uid, bid FROM tweet WHERE serial = ? AND uid = ? ORDER BY tid DESC LIMIT 5000"
+		rs, err = d.Query(sql, serial, uid)
+	} else {
+		sql := "SELECT tid, uid, bid FROM tweet WHERE serial = ? AND uid = ? AND tid < ? ORDER BY tid DESC LIMIT 5000"
+		rs, err = d.Query(sql, serial, uid, tid)
+	}
+
+	if err != nil {
+		zj.W(err)
+		return nil, err
+	}
+	defer rs.Close()
+
+	return listTweet(rs)
+}
+
+func listTweet(rs *sql.Rows) (li []*TweetRow, err error) {
 	for rs.Next() {
-		r := &pb.TweetRow{}
-		err := rs.Scan(&r.Tid, &r.Uid)
+		r := &TweetRow{}
+		err := rs.Scan(&r.Tid, &r.Uid, &r.Bid)
 		if err != nil {
 			continue
 		}
-		o.Tweet = append(o.Tweet, r)
+		li = append(li, r)
 	}
-	return o
+	return
 }
