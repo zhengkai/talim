@@ -1,10 +1,19 @@
+@if (error451) {
+	<div class="alert-box container">
+	<h3>HTTP ERROR 451</h3>
+	<p>
+		尽管没有关部门要求，<br>也不知道要根据何种相关法律、法规，<br>基于对未知风险的评估，<br>本网页决定不予显示。
+	</p>
+	</div>
+}
+
 @if (!loadDone) {
-  <div class="container">
+  <div class="alert-box container">
     <div>loading...</div>
   </div>
 } @else {
   @if (loadError) {
-    <div class="container">
+    <div class="alert-box container">
       <div>load fail</div>
     </div>
   } @else {

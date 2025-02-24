@@ -6,7 +6,7 @@ import (
 
 func indexHandle(w http.ResponseWriter, r *http.Request) {
 
-	o := newView(r)
+	o := newView(w, r)
 	if o == nil {
 		errorNotFound(w)
 		return
@@ -23,7 +23,7 @@ func indexHandle(w http.ResponseWriter, r *http.Request) {
 
 func recentHandle(w http.ResponseWriter, r *http.Request) {
 
-	o := newView(r)
+	o := newView(w, r)
 	if o == nil {
 		errorNotFound(w)
 		return
@@ -40,7 +40,7 @@ func recentHandle(w http.ResponseWriter, r *http.Request) {
 
 func tweetHandle(w http.ResponseWriter, r *http.Request) {
 
-	o := newView(r)
+	o := newView(w, r)
 	if o == nil {
 		errorNotFound(w)
 		return

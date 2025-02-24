@@ -42,6 +42,7 @@ export class TweetComponent {
 			const suid = u.uid.toString();
 			if (suid === uid) {
 				this.cover = u;
+				console.log(u);
 			}
 			this.userMap[suid] = u;
 		}

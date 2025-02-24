@@ -78,10 +78,10 @@ func writeJSON(w http.ResponseWriter, v proto.Message) {
 	w.Write(ab)
 }
 
-func newView(r *http.Request) *view.View {
+func newView(w http.ResponseWriter, r *http.Request) *view.View {
 	ip := r.Header.Get(`X-Real-IP`)
 	if geoip.Check(ip) {
-		zj.J(`cn ip`, ip)
+		w.WriteHeader(http.StatusUnavailableForLegalReasons)
 		return nil
 	}
 	return view.New(getUUID(r))

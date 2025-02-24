@@ -5,7 +5,7 @@ twitter data copier
 
 周五的时候为了抓公司竞品数据，才知道油猴脚本里劫持 xhr 非常简单，于是打算做个之前要搞的东西：备份 twitter 数据。
 
-周末搞了两天搞了个虽然简单但已经能用的东西，最终抓到的数据可以看 <https://talim.9farm.com>
+周末搞了两天搞了个虽然简单但已经能用的东西，最终抓到的数据可以看 <https://talim.9farm.com> （BTW 已经自我屏蔽，国内访问需要特殊操作）
 
 抓取脚本在 [public/twitter-copier.user.js](/public/twitter-copier.user.js)，我只会用 [Tampermonkey](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 

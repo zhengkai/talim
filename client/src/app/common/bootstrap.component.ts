@@ -6,32 +6,34 @@ import protobuf from 'protobufjs';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    RouterLink,
-  ],
-  templateUrl: './bootstrap.component.html',
+	selector: 'app-root',
+	imports: [
+		RouterOutlet,
+		RouterLink,
+	],
+	templateUrl: './bootstrap.component.html',
 })
 export class BootstrapComponent {
 
-  title = 'Talim';
+	title = 'Talim';
 
-  loadDone = false;
-  loadError = false;
+	loadDone = false;
+	loadError = false;
+	error451 = false;
 
-  constructor(
-  ) {
-    protobuf.util.Long = Long;
-    protobuf.configure();
-    this.getUser()
-  }
+	constructor(
+	) {
+		protobuf.util.Long = Long;
+		protobuf.configure();
+		this.getUser()
+	}
 
-  async getUser(): Promise<void> {
-    const li = await api.index();
-    this.loadDone = true;
-    if (!li.length) {
-      this.loadError = true;
-    }
-  }
+	async getUser(): Promise<void> {
+		const li = await api.index();
+		this.error451 = api.error451;
+		this.loadDone = true;
+		if (!li.length) {
+			this.loadError = true;
+		}
+	}
 }

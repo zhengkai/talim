@@ -3,65 +3,70 @@ import Long from 'long';
 
 class Api {
 
-  uuid: string = '54c2d184-77eb-4333-abfa-91b002e76827';
+	uuid: string = '54c2d184-77eb-4333-abfa-91b002e76827';
 
-  userList: pb.UserRow[] = [];
+	userList: pb.UserRow[] = [];
 
-  setUUID(uuid: string) {
-    this.uuid = uuid;
-  }
+	error451 = false;
 
-  async fetch(uri: string): Promise<Uint8Array | null> {
+	setUUID(uuid: string) {
+		this.uuid = uuid;
+	}
 
-    if (uri.includes('?')) {
-      uri += `&`;
-    } else {
-      uri += `?`;
-    }
-    uri += this.uuid;
+	async fetch(uri: string): Promise<Uint8Array | null> {
 
-    const rsp = await fetch(`/api/${uri}&output=pb`, {
-      method: 'GET',
-    })
-    if (!rsp?.ok) {
-      return null;
-    }
-    const ab = await rsp.arrayBuffer();
-    return new Uint8Array(ab);
-  }
+		if (uri.includes('?')) {
+			uri += `&`;
+		} else {
+			uri += `?`;
+		}
+		uri += this.uuid;
 
-  async index(): Promise<pb.UserRow[]> {
-    const ua = await this.fetch('index');
-    if (!ua?.length) {
-      return [];
-    }
-    const o = pb.UserList.decode(ua)
-    const li = this.userList;
-    li.length = 0;
-    for (const u of o.list) {
-      if (!u) {
-        continue;
-      }
-      li.push(pb.UserRow.fromObject(u));
-    }
-    return li;
-  }
+		const rsp = await fetch(`/api/${uri}&output=pb`, {
+			method: 'GET',
+		})
+		if (!rsp?.ok) {
+			if (rsp?.status === 451) {
+				this.error451 = true;
+			}
+			return null;
+		}
+		const ab = await rsp.arrayBuffer();
+		return new Uint8Array(ab);
+	}
 
-  async recent(): Promise<pb.TweetList | null> {
-    const ua = await this.fetch('recent');
-    if (!ua?.length) {
-      return null;
-    }
-    return pb.TweetList.decode(ua);
-  }
+	async index(): Promise<pb.UserRow[]> {
+		const ua = await this.fetch('index');
+		if (!ua?.length) {
+			return [];
+		}
+		const o = pb.UserList.decode(ua)
+		const li = this.userList;
+		li.length = 0;
+		for (const u of o.list) {
+			if (!u) {
+				continue;
+			}
+			li.push(pb.UserRow.fromObject(u));
+		}
+		return li;
+	}
 
-  async tweet(uid: Long, tid: Long): Promise<pb.TweetList | null> {
-    const ua = await this.fetch(`tweet?uid=${uid}&tid=${tid}`);
-    if (!ua?.length) {
-      return null;
-    }
-    return pb.TweetList.decode(ua);
-  }
+	async recent(): Promise<pb.TweetList | null> {
+		const ua = await this.fetch('recent');
+		if (!ua?.length) {
+			return null;
+		}
+		return pb.TweetList.decode(ua);
+	}
+
+	async tweet(uid: Long, tid: Long): Promise<pb.TweetList | null> {
+		const ua = await this.fetch(`tweet?uid=${uid}&tid=${tid}`);
+		if (!ua?.length) {
+			return null;
+		}
+		return pb.TweetList.decode(ua);
+	}
 }
 
 export const api = new Api();
