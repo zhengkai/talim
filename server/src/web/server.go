@@ -79,6 +79,10 @@ func writeJSON(w http.ResponseWriter, v proto.Message) {
 }
 
 func newView(w http.ResponseWriter, r *http.Request) *view.View {
+
+	if r.Method != http.MethodGet || r.Header.Get(`Referer`) == `` {
+		return nil
+	}
 	ip := r.Header.Get(`X-Real-IP`)
 	if geoip.Check(ip) {
 		w.WriteHeader(http.StatusUnavailableForLegalReasons)
