@@ -32,7 +32,7 @@
 <div class="tweet container">
 	<p class="text">{{ t.text }}</p>
 	<p class="date code">{{ t.ts * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}
-		<a href="https://x.com/x/status/{{ t.tid }}" target="_blank">original</a>
+		<a href="https://x.com/x/status/{{ t.tid }}" target="_blank">original: {{ t.tid }}</a>
 	</p>
 	@if (t.media.length) {
 	<div class="media">

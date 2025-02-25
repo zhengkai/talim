@@ -4,6 +4,8 @@ import { pb } from '../../pb';
 import Long from 'long';
 import { DatePipe } from '@angular/common';
 
+const LongZero = Long.fromNumber(0);
+
 @Component({
 	selector: 'app-tweet',
 	imports: [
@@ -23,6 +25,8 @@ export class TweetComponent {
 
 	api = api;
 
+	loadCnt = 0;
+
 	tweet: pb.TweetRow[] = [];
 
 	constructor() {
@@ -31,8 +35,12 @@ export class TweetComponent {
 		});
 	}
 
-	async load(uid: string) {
-		const o = await api.tweet(Long.fromString(uid), Long.fromNumber(0));
+	async load(uid: string, tid = LongZero) {
+		this.loadCnt++;
+		if (this.loadCnt > 4) {
+			return;
+		}
+		const o = await api.tweet(Long.fromString(uid), tid);
 		this.loadDone = true;
 		if (!o?.tweet?.length) {
 			return;
@@ -46,11 +54,22 @@ export class TweetComponent {
 			}
 			this.userMap[suid] = u;
 		}
-		for (const r of o?.tweet || []) {
-			const t = pb.TweetRow.fromObject(r);
-			this.tweet.push(t);
-			const doc = new DOMParser().parseFromString(t.text, "text/html");
-			t.text = doc.documentElement.textContent || '';
+		const len = o?.tweet?.length || 0;
+		if (len) {
+			for (const r of o.tweet || []) {
+				const t = pb.TweetRow.fromObject(r);
+				this.tweet.push(t);
+				const doc = new DOMParser().parseFromString(t.text, "text/html");
+				t.text = doc.documentElement.textContent || '';
+			}
+			if (len === 5000) {
+				const last = o.tweet[len - 1]?.tid;
+				if (last) {
+					this.load(uid, last);
+					console.log(o.tweet[0].tid?.toString());
+					console.log(last.toString())
+				}
+			}
 		}
 	}
 }

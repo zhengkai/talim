@@ -38,7 +38,7 @@ func (v *View) fillTweetList(li []*db.TweetRow) *pb.TweetList {
 		o.Tweet = append(o.Tweet, TweetRow(v))
 	}
 
-	v.TweetFillUser(o)
+	// v.TweetFillUser(o)
 	return o
 }
 
