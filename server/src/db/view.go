@@ -16,10 +16,10 @@ type UserRow struct {
 	TweetCount uint64
 }
 
-func ViewUserCount(serial uint64) []*UserRow {
+func ViewUserCount() []*UserRow {
 
-	sql := "SELECT uid, COUNT(uid) as cnt FROM tweet WHERE serial = ? GROUP BY uid"
-	rs, err := d.Query(sql, serial)
+	sql := "SELECT uid, COUNT(uid) as cnt FROM tweet GROUP BY uid"
+	rs, err := d.Query(sql)
 	if err != nil {
 		return nil
 	}
@@ -37,17 +37,17 @@ func ViewUserCount(serial uint64) []*UserRow {
 	return li
 }
 
-func TweetRecent(serial, tid uint64) ([]*TweetRow, error) {
+func TweetRecent(tid uint64) ([]*TweetRow, error) {
 
 	var rs *sql.Rows
 	var err error
 
 	if tid == 0 {
-		sql := "SELECT tid, uid, bid FROM tweet WHERE serial = ? ORDER BY tid DESC LIMIT 5000"
-		rs, err = d.Query(sql, serial)
+		sql := "SELECT tid, uid, bid FROM tweet ORDER BY tid DESC LIMIT 5000"
+		rs, err = d.Query(sql)
 	} else {
-		sql := "SELECT tid, uid, bid FROM tweet WHERE serial = ? AND tid < ? ORDER BY tid DESC LIMIT 5000"
-		rs, err = d.Query(sql, serial, tid)
+		sql := "SELECT tid, uid, bid FROM tweet WHERE tid < ? ORDER BY tid DESC LIMIT 5000"
+		rs, err = d.Query(sql, tid)
 	}
 
 	if err != nil {
@@ -59,17 +59,17 @@ func TweetRecent(serial, tid uint64) ([]*TweetRow, error) {
 	return listTweet(rs)
 }
 
-func TweetList(serial, uid, tid uint64) ([]*TweetRow, error) {
+func TweetList(uid, tid uint64) ([]*TweetRow, error) {
 
 	var rs *sql.Rows
 	var err error
 
 	if tid == 0 {
-		sql := "SELECT tid, uid, bid FROM tweet WHERE serial = ? AND uid = ? ORDER BY tid DESC LIMIT 5000"
-		rs, err = d.Query(sql, serial, uid)
+		sql := "SELECT tid, uid, bid FROM tweet WHERE uid = ? ORDER BY tid DESC LIMIT 5000"
+		rs, err = d.Query(sql, uid)
 	} else {
-		sql := "SELECT tid, uid, bid FROM tweet WHERE serial = ? AND uid = ? AND tid < ? ORDER BY tid DESC LIMIT 5000"
-		rs, err = d.Query(sql, serial, uid, tid)
+		sql := "SELECT tid, uid, bid FROM tweet WHERE uid = ? AND tid < ? ORDER BY tid DESC LIMIT 5000"
+		rs, err = d.Query(sql, uid, tid)
 	}
 
 	if err != nil {
