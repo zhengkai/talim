@@ -72,7 +72,7 @@ func (u *upload) importUser(ab []byte, uid uint64) *user {
 		return nil
 	}
 
-	db.UserSave(u.Serial(), uid, re)
+	db.UserSave(uid, re)
 
 	return &user{
 		uid: uid,
@@ -140,7 +140,7 @@ func (u *upload) importTweet(ab []byte) *tweet {
 		return nil
 	}
 
-	db.TweetSave(u.Serial(), tid, uid, bid)
+	db.TweetSave(tid, uid, bid)
 
 	return &tweet{
 		uid: uid,

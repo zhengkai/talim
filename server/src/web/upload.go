@@ -3,11 +3,10 @@ package web
 import (
 	"io"
 	"net/http"
+	"project/config"
 	"project/upload"
-	"project/util"
+	"project/zj"
 	"strconv"
-
-	"github.com/google/uuid"
 )
 
 var okJSON = []byte(`{"ok":true}`)
@@ -20,7 +19,10 @@ func uploadHandle(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		return
 	}
-
+	if r.URL.Query().Get(`token`) != config.Token {
+		zj.W(`bad token`)
+		return
+	}
 	body, err := io.ReadAll(io.LimitReader(r.Body, 1024*1024))
 	if err != nil || len(body) < 1000 {
 		return
@@ -29,13 +31,9 @@ func uploadHandle(w http.ResponseWriter, r *http.Request) {
 		// not json
 		return
 	}
+	zj.J(`upload`, len(body))
 
-	u, err := uuid.Parse(r.URL.Query().Get(`uuid`))
-	if err != nil {
-		u = util.DefaultUUID
-	}
-
-	go upload.New(u, body)
+	go upload.New(body)
 }
 
 func corsWrite(w http.ResponseWriter, r *http.Request) (stop bool) {

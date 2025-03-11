@@ -14,9 +14,9 @@ type serialUser struct {
 	uid      uint64
 }
 
-func userCoral(su serialUser) (*pb.User, *time.Time, error) {
+func userCoral(uid uint64) (*pb.User, *time.Time, error) {
 
-	bin := db.UserLoad(su.uuserial, su.uid)
+	bin := db.UserLoad(uid)
 
 	if len(bin) < 10 {
 		// zj.J(`load user fail`, su.uid)
@@ -24,7 +24,7 @@ func userCoral(su serialUser) (*pb.User, *time.Time, error) {
 	}
 
 	u := &pb.User{
-		Uid: su.uid,
+		Uid: uid,
 	}
 	u.Name, _ = jp.GetString(bin, `name`)
 	u.ScreenName, _ = jp.GetString(bin, `screen_name`)
@@ -44,10 +44,6 @@ func userCoral(su serialUser) (*pb.User, *time.Time, error) {
 }
 
 func (v *View) GetUser(uid uint64) *pb.User {
-	q := serialUser{
-		uuserial: v.uuserial,
-		uid:      uid,
-	}
-	u, _ := v.userCache.Get(q)
+	u, _ := v.userCache.Get(uid)
 	return u
 }

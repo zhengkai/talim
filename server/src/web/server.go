@@ -6,14 +6,12 @@ import (
 	"net/http"
 	"project/config"
 	"project/geoip"
-	"project/util"
 	"project/view"
 	"project/zj"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -88,18 +86,5 @@ func newView(w http.ResponseWriter, r *http.Request) *view.View {
 		w.WriteHeader(http.StatusUnavailableForLegalReasons)
 		return nil
 	}
-	return view.New(getUUID(r))
-}
-
-func getUUID(r *http.Request) (u uuid.UUID) {
-	u = util.KaiUUID
-	s := r.URL.Query().Get(`uuid`)
-	if s == `` {
-		return
-	}
-	pu, err := uuid.Parse(s)
-	if err == nil {
-		u = pu
-	}
-	return
+	return view.TheView
 }

@@ -11,6 +11,7 @@ const keyTypeUser = `User`
 const keyTypeTweet = `Tweet`
 
 func (u *upload) check(ab []byte) {
+
 	t, _ := jp.GetString(ab, `__typename`)
 	if t == `` {
 		return

@@ -12,7 +12,7 @@ import (
 
 func (v *View) TweetList(uid uint64, tid uint64) *pb.TweetList {
 
-	li, _ := db.TweetList(v.uuserial, uid, tid)
+	li, _ := db.TweetList(uid, tid)
 	if len(li) == 0 {
 		return nil
 	}
@@ -22,7 +22,7 @@ func (v *View) TweetList(uid uint64, tid uint64) *pb.TweetList {
 
 func (v *View) TweetRecent(tid uint64) *pb.TweetList {
 
-	li, _ := db.TweetRecent(v.uuserial, tid)
+	li, _ := db.TweetRecent(tid)
 	if len(li) == 0 {
 		return nil
 	}

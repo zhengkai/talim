@@ -7,7 +7,7 @@ import (
 
 func (v *View) Index() *pb.UserList {
 
-	li := db.ViewUserCount(v.uuserial)
+	li := db.ViewUserCount()
 	if len(li) == 0 {
 		return nil
 	}

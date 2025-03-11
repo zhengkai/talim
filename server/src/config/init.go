@@ -13,6 +13,7 @@ func init() {
 		`TALIM_WEB`:   &WebAddr,
 		`TALIM_MYSQL`: &MySQL,
 		`TALIM_DIR`:   &StaticDir,
+		`TALIM_TOKEN`: &Token,
 	}
 	for k, v := range list {
 		s := os.Getenv(k)

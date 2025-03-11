@@ -11,6 +11,7 @@ sudo docker stop "talim-${BRANCH}"
 sudo docker rm "talim-${BRANCH}"
 sudo docker run \
 	-d --name "talim-${BRANCH}" \
+	--env "TALIM_TOKEN=${TALIM_TOKEN}" \
 	-p "127.0.0.1:${TALIM_PORT}:80" \
 	--mount "type=bind,source=${TALIM_DIR},target=/static" \
 	--restart always \
