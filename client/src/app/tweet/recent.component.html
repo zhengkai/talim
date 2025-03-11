@@ -1,1 +1,3 @@
-<p>tweet-recent works!</p>
+@for (t of tweet; track $index) {
+	<app-tweet-item [t]="t"></app-tweet-item>
+}

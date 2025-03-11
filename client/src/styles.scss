@@ -1,3 +1,7 @@
+body {
+	overflow-y: scroll;
+}
+
 img.avatar {
 	width: 24px;
 	height: 24px;
@@ -8,6 +12,11 @@ header {
 	> div {
 		height: 48px;
 		padding-top: 16px;
+		> div.row > div:first-child {
+			a {
+				margin-right: 16px;
+			}
+		}
 	}
 	border-bottom: 1px solid gray;
 }

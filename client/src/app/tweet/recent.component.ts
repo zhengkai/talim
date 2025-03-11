@@ -1,33 +1,39 @@
-import { Component, input, effect } from '@angular/core';
+import { Component } from '@angular/core';
 import { api } from '../common/api';
-import { OnInit } from '@angular/core';
+import { pb } from '../../pb';
+import { TweetItemComponent } from './item.component';
 
 @Component({
-  selector: 'app-tweet-recent',
-  imports: [],
-  templateUrl: './tweet-recent.component.html',
+	selector: 'app-tweet-recent',
+	imports: [
+		TweetItemComponent,
+	],
+	templateUrl: './recent.component.html',
 })
-export class TweetRecentComponent implements OnInit {
+export class TweetRecentComponent {
 
-  loadDone = false;
+	loadDone = false;
 
-  uid = input.required<string>();
+	tweet: pb.TweetRow[] = [];
 
-  api = api;
+	api = api;
 
-  constructor() {
-    effect(() => {
-      let h = this.uid()
-      console.log(h);
-      // this.load();
-    });
-  }
+	constructor() {
+		this.load();
+	}
 
-  load(uid: string) {
-    console.log('load', uid)
-  }
+	async load() {
+		const o = await api.recent();
+		this.loadDone = true;
+		if (!o?.tweet?.length) {
+			return;
+		}
 
-  ngOnInit() {
-    console.log('TweetRecentComponent initialized');
-  }
+		for (const r of o.tweet || []) {
+			const t = pb.TweetRow.fromObject(r);
+			this.tweet.push(t);
+			const doc = new DOMParser().parseFromString(t.text, "text/html");
+			t.text = doc.documentElement.textContent || '';
+		}
+	}
 }

@@ -3,6 +3,7 @@ import { api } from '../common/api';
 import { pb } from '../../pb';
 import Long from 'long';
 import { DatePipe } from '@angular/common';
+import { TweetItemComponent } from './item.component';
 
 const LongZero = Long.fromNumber(0);
 
@@ -10,6 +11,7 @@ const LongZero = Long.fromNumber(0);
 	selector: 'app-tweet',
 	imports: [
 		DatePipe,
+		TweetItemComponent,
 	],
 	templateUrl: './tweet.component.html',
 })
