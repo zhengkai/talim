@@ -21,7 +21,9 @@ func run() {
 
 	zj.J(`token`, config.Token[:13], `...`, config.Token[28:])
 
-	go dl.Loop()
+	if config.Prod {
+		go dl.Loop()
+	}
 
 	go web.Server()
 }

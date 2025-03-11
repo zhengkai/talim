@@ -2,7 +2,7 @@ package dl
 
 import "project/config"
 
-var ch = make(chan string)
+var ch chan string
 
 func Insert(s string) {
 
@@ -22,6 +22,7 @@ func Insert(s string) {
 }
 
 func Loop() {
+	ch = make(chan string, 10000)
 	for v := range ch {
 		download(v)
 	}

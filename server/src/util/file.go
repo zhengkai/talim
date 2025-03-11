@@ -20,7 +20,7 @@ func Mkdir(filename string) error {
 	if dir == config.StaticDir {
 		return nil
 	}
-	return os.MkdirAll(dir, 0755)
+	return os.MkdirAll(dir, 0775)
 }
 
 func FileDelete(filename string) error {

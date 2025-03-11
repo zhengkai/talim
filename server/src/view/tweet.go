@@ -2,6 +2,7 @@ package view
 
 import (
 	"project/db"
+	"project/media"
 	"project/pb"
 	"project/util"
 	"time"
@@ -88,7 +89,7 @@ func TweetRow(dr *db.TweetRow) *pb.TweetRow {
 	}
 
 	// media
-	util.Media(bin, pr)
+	media.Media(bin, pr)
 
 	// reply
 	replyTID := util.JSONStr2Uint(bin, `in_reply_to_status_id_str`)
