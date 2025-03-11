@@ -19,5 +19,5 @@ chmod +x output/install.sh
 cat output/install.sh
 
 TARGET="${NAME}:/www/talim/docker/"
-scp output/install.sh "$TARGET"
-# rsync --partial -vzrtopg -e ssh "output/talim-image-${BRANCH}.tar" "$TARGET"
+echo scp output/install.sh "$TARGET"
+#rsync --partial -vzrtopg -e ssh "output/talim-image-${BRANCH}.tar" "$TARGET"

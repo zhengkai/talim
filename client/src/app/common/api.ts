@@ -3,15 +3,9 @@ import Long from 'long';
 
 class Api {
 
-	uuid: string = '54c2d184-77eb-4333-abfa-91b002e76827';
-
 	userList: pb.UserRow[] = [];
 
 	error451 = false;
-
-	setUUID(uuid: string) {
-		this.uuid = uuid;
-	}
 
 	async fetch(uri: string): Promise<Uint8Array | null> {
 
@@ -20,9 +14,9 @@ class Api {
 		} else {
 			uri += `?`;
 		}
-		uri += this.uuid;
+		uri += 'output=pb';
 
-		const rsp = await fetch(`/api/${uri}&output=pb`, {
+		const rsp = await fetch(`/api/${uri}`, {
 			method: 'GET',
 		})
 		if (!rsp?.ok) {
