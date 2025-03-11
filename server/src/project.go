@@ -4,6 +4,7 @@ import (
 	"project/build"
 	"project/config"
 	"project/db"
+	"project/dl"
 	"project/web"
 	"project/zj"
 )
@@ -19,6 +20,8 @@ func run() {
 	// upload.Test()
 
 	zj.J(`token`, config.Token[:13], `...`, config.Token[28:])
+
+	go dl.Loop()
 
 	go web.Server()
 }

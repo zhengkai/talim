@@ -1,7 +1,6 @@
 package view
 
 import (
-	"encoding/json"
 	"project/db"
 	"project/pb"
 	"project/util"
@@ -89,31 +88,7 @@ func TweetRow(dr *db.TweetRow) *pb.TweetRow {
 	}
 
 	// media
-	jp.ArrayEach(bin, func(v []byte, _ jp.ValueType, _ int, _ error) {
-		o := &pb.TwitterMedia{}
-		json.Unmarshal(v, o)
-		if o.MediaUrlHttps == `` {
-			return
-		}
-
-		m := &pb.TweetMedia{
-			Img: o.MediaUrlHttps,
-		}
-		pr.Media = append(pr.Media, m)
-
-		vli := o.GetVideoInfo().GetVariants()
-		if len(vli) > 0 {
-			vo := vli[0]
-			for _, vr := range vli {
-				if vr.Bitrate > vo.Bitrate {
-					vo = vr
-				}
-			}
-			m.Video = vo.Url
-			m.ContentType = vo.ContentType
-			m.DurMS = uint32(o.GetVideoInfo().GetDurationMillis())
-		}
-	}, `entities`, `media`)
+	util.Media(bin, pr)
 
 	// reply
 	replyTID := util.JSONStr2Uint(bin, `in_reply_to_status_id_str`)

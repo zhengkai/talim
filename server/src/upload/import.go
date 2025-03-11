@@ -3,6 +3,8 @@ package upload
 import (
 	"encoding/json"
 	"project/db"
+	"project/dl"
+	"project/pb"
 	"project/util"
 	"project/zj"
 	"strconv"
@@ -139,6 +141,15 @@ func (u *upload) importTweet(ab []byte) *tweet {
 	if bid == 0 {
 		return nil
 	}
+
+	go func() {
+		r := &pb.TweetRow{}
+		util.Media(re, r)
+		for _, v := range r.GetMedia() {
+			dl.Insert(v.Img)
+			dl.Insert(v.Video)
+		}
+	}()
 
 	db.TweetSave(tid, uid, bid)
 

@@ -100,14 +100,7 @@ func writeFile[T []byte | string](file string, content T) (err error) {
 
 func WriteTemp[T []byte | string](file string, content T) (filename string, err error) {
 
-	var TempDir string
-	if strings.Contains(file, `/nfs/`) {
-		TempDir = Static(`nfs/tmp`)
-	} else {
-		TempDir = Static(`tmp`)
-	}
-
-	f, err := os.CreateTemp(TempDir, zu.TempFilePattern)
+	f, err := os.CreateTemp(Static(`tmp`), zu.TempFilePattern)
 	if err != nil {
 		return
 	}
