@@ -11,9 +11,11 @@ import (
 
 var pExt = regexp.MustCompile(`[a-z0-9]{1,10}`)
 
-func download(s string) {
-	hash := md5.Sum([]byte(s))
+func download(url string) {
 
+	hash := md5.Sum([]byte(url))
+
+	s := strings.Split(url, `?`)[0]
 	ext := strings.ToLower(strings.TrimPrefix(filepath.Ext(s), `.`))
 	if !pExt.MatchString(ext) {
 		return
@@ -21,5 +23,5 @@ func download(s string) {
 
 	file := fmt.Sprintf(`file/%x/%x/%x.%s`, hash[:1], hash[1:2], hash[2:], ext)
 
-	util.Download(s, file)
+	util.Download(url, file)
 }

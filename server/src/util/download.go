@@ -46,6 +46,8 @@ func Download(url, file string) (err error) {
 
 	f.Close()
 	Mkdir(file)
-	os.Rename(f.Name(), Static(file))
+	file = Static(file)
+	os.Rename(f.Name(), file)
+	go os.Chmod(file, 0664)
 	return
 }
