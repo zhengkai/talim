@@ -17,6 +17,9 @@ func download(url string) {
 
 	s := strings.Split(url, `?`)[0]
 	ext := strings.ToLower(strings.TrimPrefix(filepath.Ext(s), `.`))
+	if ext == `.mp4` {
+		return
+	}
 	if !pExt.MatchString(ext) {
 		return
 	}
